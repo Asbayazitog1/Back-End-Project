@@ -1,5 +1,5 @@
 const express = require("express");
-const { handlePsqErrors, handleCustomErrors, handleServerErrors } = require("./errors");
+const { handlePsqErrors, handleCustomErrors, handleServerErrors, handleBadPath } = require("./errors");
 const { getAllTopics } = require("./app.controller");
 
 const app =express()
@@ -10,9 +10,10 @@ app.get('/api/topics', getAllTopics)
 
 
 
-app.use(handlePsqErrors);
-app.use(handleCustomErrors);
-app.use(handleServerErrors);
+
+app.all( (req,res,next) =>{
+    res.status(404).send("Not Found")
+});
 
 
 module.exports = app;

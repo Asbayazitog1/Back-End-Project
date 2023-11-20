@@ -18,8 +18,9 @@ describe("GET /api/topics",()=>{
         .get("/api/topics")
         .expect(200)
         .then(({ body }) =>{
-            expect(body.length).toBe(3)
-            body.forEach( topic =>{
+            console.log(body)
+            expect(body.topics.length).toBe(3)
+            body.topics.forEach( topic =>{
                 expect(topic).toMatchObject({
                     description: expect.any(String),
                     slug: expect.any(String)
@@ -31,6 +32,8 @@ describe("GET /api/topics",()=>{
         return request(app)
           .get("/api/tops")
           .expect(404)
-
+          .then((data) => {
+            expect(data.res.statusMessage).toBe("Not Found");
+          });
       });
 })  
