@@ -14,7 +14,7 @@ exports.getAllEndpoints=(req,res, next)=>{
 return fs.readFile(`./endpoints.json`,'utf-8').then(result =>{
     return JSON.parse(result)
 }).then(data =>{
-    res.status(200).send(data)
+    res.status(200).send({endpoints:data})
 })
 
 

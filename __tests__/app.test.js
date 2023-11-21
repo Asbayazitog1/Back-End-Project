@@ -41,10 +41,9 @@ describe("GET /api",()=>{
         return request(app)
         .get("/api")
         .expect(200)
-        .then(({body})=>{ 
-            console.log(body,"---data")
-            for(key in body) { 
-                expect(body[key]).toMatchObject({
+        .then(({endpoints})=>{ 
+            for(key in endpoints) { 
+                expect(endpoints[key]).toMatchObject({
                     "description": expect.any(String),
                     "queries": expect.any(Array),
                     "exampleResponse": expect.any(Object)
