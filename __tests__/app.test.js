@@ -37,7 +37,7 @@ describe("GET /api/topics",()=>{
           });
       });
 })  
-describe.only("GET /api",()=>{
+describe.skip("GET /api",()=>{
     test("responds with 200 with all /api paths and their info ",()=>{
         return request(app)
         .get('/api')

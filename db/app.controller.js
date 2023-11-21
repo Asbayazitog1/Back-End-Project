@@ -13,6 +13,6 @@ exports.getAllEndpoints=(req,res, next)=>{
 readEndpoints().then((result)=>{
     console.log(result)
     const enpoints ={...result}
-  res.status(200).send(enpoints)
+
 })
 }
