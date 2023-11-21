@@ -9,12 +9,5 @@ exports.selectTopics =() =>{
     })
 }
 
-exports.readEndpoints =() =>{
-   return fs.readFile(`../be-nc-news/endpoints.json`).then(data => {
-        const fileData =JSON.parse(data)
-        return fileData
-    })
-
-}
 
 

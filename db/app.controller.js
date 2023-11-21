@@ -1,5 +1,6 @@
-const { selectTopics, readEndpoints } = require("./app.model")
-
+const { selectTopics } = require("./app.model")
+const fs =require("fs/promises")
+const endpoints = require("../endpoints.json")
 exports.getAllTopics = (req,res,next) =>{
     selectTopics().then(data =>{
        
@@ -10,9 +11,11 @@ exports.getAllTopics = (req,res,next) =>{
     })
 }
 exports.getAllEndpoints=(req,res, next)=>{
-readEndpoints().then((result)=>{
-    console.log(result)
-    const enpoints ={...result}
-
+return fs.readFile(`./endpoints.json`,'utf-8').then(result =>{
+    return JSON.parse(result)
+}).then(data =>{
+    res.status(200).send(data)
 })
+
+
 }

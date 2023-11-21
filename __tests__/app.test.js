@@ -32,22 +32,25 @@ describe("GET /api/topics",()=>{
           .get("/api/tops")
           .expect(404)
           .then((data) => {
-            console.log(data)
             expect(data.res.statusMessage).toBe("Not Found");
           });
       });
 })  
-describe.skip("GET /api",()=>{
+describe("GET /api",()=>{
     test("responds with 200 with all /api paths and their info ",()=>{
         return request(app)
-        .get('/api')
+        .get("/api")
         .expect(200)
-        .then((data)=>{   
-          expect(data).toMatchObject({
-           "description": expect.any(String),
-           "queries": expect.any(Array),
-           "exampleResponse": expect.any(Object)
-          })
+        .then(({body})=>{ 
+            console.log(body,"---data")
+            for(key in body) { 
+                expect(body[key]).toMatchObject({
+                    "description": expect.any(String),
+                    "queries": expect.any(Array),
+                    "exampleResponse": expect.any(Object)
+                   })
+            } 
+         
         })
     })
 })
