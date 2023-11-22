@@ -3,6 +3,8 @@ const request = require("supertest")
 const seed = require("../db/seeds/seed")
 const data = require("../db/data/test-data/")
 const db = require("../db/connection")
+const { string } = require("pg-format")
+const articles = require("../db/data/test-data/articles")
 require("jest-sorted")
 
 beforeEach(() => {
@@ -32,7 +34,6 @@ describe("GET /api/topics",()=>{
           .get("/api/tops")
           .expect(404)
           .then((data) => {
-            console.log(data)
             expect(data.res.statusMessage).toBe("Not Found");
           });
       });
@@ -87,4 +88,45 @@ describe("GET/api/articles/:article_id",()=>{
         expect(body.msg).toBe("not found")
     })
     })
+})
+
+describe("GET /api/articles",()=>{
+    test("responds with 200 and all articles in an array without body property",()=>{
+        return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({body})=>{
+            const articles =body.articles
+            expect(articles.length).toBe(13);
+            articles.forEach(article =>{
+                expect(article).not.toHaveProperty("body")
+                expect(article).toMatchObject({
+                    author : expect.any(String),
+                    title : expect.any(String),
+                    article_id:expect.any(Number),
+                    topic :expect.any(String),
+                    created_at: expect.any(String),
+                    votes : expect.any(Number),
+                    article_img_url :expect.any(String),
+                    comment_count : expect.any(Number)
+                })
+            })
+        })
+    })
+    test("responds with 200 and all item in array should be sorted by date",()=>{
+        return request(app)
+        .get("/api/articles?sort_by=created_at")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles).toBeSortedBy("created_at", { descending: true });
+        })
+    })
+    test("responds with 400 with an invalid order option", () => {
+        return request(app)
+          .get("/api/articles?sort_by=date")
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe("Invalid sort option");
+          });
+})
 })
