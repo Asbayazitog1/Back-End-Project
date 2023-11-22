@@ -18,7 +18,6 @@ describe("GET /api/topics",()=>{
         .get("/api/topics")
         .expect(200)
         .then(({ body }) =>{
-            console.log(body)
             expect(body.topics.length).toBe(3)
             body.topics.forEach( topic =>{
                 expect(topic).toMatchObject({
@@ -37,3 +36,20 @@ describe("GET /api/topics",()=>{
           });
       });
 })  
+describe("GET /api",()=>{
+    test("responds with 200 with all /api paths and their info ",()=>{
+        return request(app)
+        .get("/api")
+        .expect(200)
+        .then(({endpoints})=>{ 
+            for(key in endpoints) { 
+                expect(endpoints[key]).toMatchObject({
+                    "description": expect.any(String),
+                    "queries": expect.any(Array),
+                    "exampleResponse": expect.any(Object)
+                   })
+            } 
+         
+        })
+    })
+})
