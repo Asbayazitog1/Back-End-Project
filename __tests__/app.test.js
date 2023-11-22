@@ -91,7 +91,7 @@ describe("GET/api/articles/:article_id",()=>{
 })
 
 describe("GET /api/articles",()=>{
-    test("responds with 200 and all articles in an array",()=>{
+    test("responds with 200 and all articles in an array without body property",()=>{
         return request(app)
         .get("/api/articles")
         .expect(200)
@@ -99,6 +99,7 @@ describe("GET /api/articles",()=>{
             const articles =body.articles
             expect(articles.length).toBe(13);
             articles.forEach(article =>{
+                expect(article).not.toHaveProperty("body")
                 expect(article).toMatchObject({
                     author : expect.any(String),
                     title : expect.any(String),
@@ -117,7 +118,6 @@ describe("GET /api/articles",()=>{
         .get("/api/articles?sort_by=created_at")
         .expect(200)
         .then(({ body }) => {
-            console.log(body.articles)
           expect(body.articles).toBeSortedBy("created_at", { descending: true });
         })
     })

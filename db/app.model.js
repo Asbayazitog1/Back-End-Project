@@ -27,7 +27,7 @@ exports.selectAllArticles = (query) =>{
   if(sort_by && !allowedSortBy.includes(sort_by)){
     return Promise.reject({ status: 400, msg: "Invalid sort option" })
   }
-  let queryString =`SELECT *,(SELECT COUNT(article_id) FROM comments WHERE articles.article_id = comments.article_id) AS comment_count FROM articles`
+  let queryString =`SELECT article_id, author, title,topic, created_at, votes, article_img_url ,(SELECT COUNT(article_id) FROM comments WHERE articles.article_id = comments.article_id) AS comment_count FROM articles`
 
   const sortOrder =(order && order ==="asc")?'ASC':'DESC'
 
