@@ -9,17 +9,6 @@ exports.selectTopics =() =>{
     })
 }
 
-exports.readEndpoints =() =>{
-   return fs.readFile(`../be-nc-news/endpoints.json`).then(data => {
-        const fileData =JSON.parse(data)
-        return fileData
-    })
-
-}
-
-
-
-
 
 exports.selectArticlesById=(article_id)=>{
 const queryString =`SELECT * FROM articles WHERE article_id =$1;`

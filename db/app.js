@@ -1,7 +1,7 @@
 const express = require("express");
-const { handlePsqErrors, handleCustomErrors, handleServerErrors } = require("./errors");
+const { handlePsqErrors, handleCustomErrors } = require("./errors");
 const { getAllTopics, getAllEndpoints, getArticleByArticleID } = require("./app.controller");
-// const apiRouter = require('./routes/api')
+
 
 const app =express()
 

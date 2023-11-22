@@ -1,6 +1,5 @@
-const { selectTopics } = require("./app.model")
+const { selectTopics, selectArticlesById } = require("./app.model")
 const fs =require("fs/promises")
-const endpoints = require("../endpoints.json")
 exports.getAllTopics = (req,res,next) =>{
     selectTopics().then(data =>{
        
@@ -19,7 +18,7 @@ return fs.readFile(`./endpoints.json`,'utf-8').then(result =>{
 
 
 }
-const { selectTopics, readEndpoints, selectArticlesById } = require("./app.model")
+
 
 exports.getAllTopics = (req,res,next) =>{
     selectTopics().then(data =>{
@@ -30,16 +29,10 @@ exports.getAllTopics = (req,res,next) =>{
        next(err)
     })
 }
-exports.getAllEndpoints=(req,res, next)=>{
-readEndpoints().then((result)=>{
-    const enpoints ={...result}
-
-})
-}
 exports.getArticleByArticleID=(req,res,next)=>{
 const {article_id} = req.params
 selectArticlesById(article_id).then(article =>{
-    res.status(200).send(article)
+    res.status(200).send({articles:article})
 }).catch(err =>{
     next(err)
 })

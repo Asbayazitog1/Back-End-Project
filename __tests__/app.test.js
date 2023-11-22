@@ -37,17 +37,18 @@ describe("GET /api/topics",()=>{
           });
       });
 })  
-describe.skip("GET /api",()=>{
+describe("GET /api",()=>{
     test("responds with 200 with all /api paths and their info ",()=>{
         return request(app)
         .get('/api')
         .expect(200)
-        .then((data)=>{   
-          expect(data).toMatchObject({
-           "description": expect.any(String),
-           "queries": expect.any(Array),
-           "exampleResponse": expect.any(Object)
-          })
+        .then(({endpoints})=>{ 
+            for(key in endpoints){expect(endpoints).toMatchObject({
+                "description": expect.any(String),
+                "queries": expect.any(Array),
+                "exampleResponse": expect.any(Object)
+               })  }
+          
         })
     })
 })
@@ -57,7 +58,7 @@ describe("GET/api/articles/:article_id",()=>{
         return request(app)
         .get('/api/articles/2')
         .expect(200).then(({body}) =>{
-            expect(body).toEqual({
+            expect(body).toEqual({articles :{
                 article_id:2,
                 title: "Sony Vaio; or, The Laptop",
                 topic: "mitch",
@@ -67,7 +68,7 @@ describe("GET/api/articles/:article_id",()=>{
                 article_img_url:
                   "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
                   votes:0
-              })
+              }})
         })
     })
     test("responds with 400 when article id is NaN",()=>{
