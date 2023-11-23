@@ -130,3 +130,43 @@ describe("GET /api/articles",()=>{
           });
 })
 })
+
+describe("GET /api/articles/:article_id/comments",()=>{
+   test("responds with 200 with all articles with given id from the latest to oldest",()=>{
+    return request(app)
+    .get('/api/articles/1/comments')
+    .expect(200)
+    .then(({body})=>{
+        const comments = body.comments
+        expect(comments).toBeSortedBy('created_at',{descending : true})
+        expect(comments.length).toBe(11)
+        comments.forEach(comment =>{
+            expect(comment).toMatchObject({
+                comment_id : expect.any(Number),
+                votes : expect.any(Number),
+                created_at :expect.any(String),
+                author: expect.any(String),
+                body : expect.any(String),
+                article_id :expect.any(Number)
+            })
+        })
+
+    })
+   }) 
+   test('responds with 404 when no math found for the given id',()=>{
+    return request(app)
+    .get('/api/articles/55/comments')
+    .expect(404)
+    .then(({body})=>{
+        expect(body.msg).toBe('comment not found')
+    })
+   })
+   test('responds with 400 when given id is NaN',()=>{
+    return request(app)
+    .get('/api/articles/one/comments')
+    .expect(400)
+    .then(({body})=>{
+        expect(body.msg).toBe('bad request')
+    })
+   })
+})
