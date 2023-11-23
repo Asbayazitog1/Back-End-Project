@@ -161,12 +161,12 @@ describe("GET /api/articles/:article_id/comments",()=>{
         expect(body.msg).toBe('article not found')
     })
    })
-   test('responds with 404 when no comment found for the given id',()=>{
+   test('responds with 200 with empty array when no comment found for the given id',()=>{
     return request(app)
     .get('/api/articles/7/comments')
-    .expect(404)
+    .expect(200)
     .then(({body})=>{
-        expect(body.msg).toBe('comment not found')
+        expect(body.comments).toEqual([])
     })
    })
    test('responds with 400 when given id is NaN',()=>{
