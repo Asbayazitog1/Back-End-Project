@@ -85,7 +85,7 @@ describe("GET/api/articles/:article_id",()=>{
        .get('/api/articles/99')
        .expect(404)
        .then(({body})=>{
-        expect(body.msg).toBe("not found")
+        expect(body.msg).toBe("article not found")
     })
     })
 })
@@ -129,4 +129,52 @@ describe("GET /api/articles",()=>{
             expect(body.msg).toBe("Invalid sort option");
           });
 })
+})
+
+describe("GET /api/articles/:article_id/comments",()=>{
+   test("responds with 200 with all articles with given id from the latest to oldest",()=>{
+    return request(app)
+    .get('/api/articles/1/comments')
+    .expect(200)
+    .then(({body})=>{
+        const comments = body.comments
+        expect(comments).toBeSortedBy('created_at',{descending : true})
+        expect(comments.length).toBe(11)
+        comments.forEach(comment =>{
+            expect(comment).toMatchObject({
+                comment_id : expect.any(Number),
+                votes : expect.any(Number),
+                created_at :expect.any(String),
+                author: expect.any(String),
+                body : expect.any(String),
+                article_id :expect.any(Number)
+            })
+        })
+
+    })
+   }) 
+   test('responds with 404 when no article found for the given id',()=>{
+    return request(app)
+    .get('/api/articles/55/comments')
+    .expect(404)
+    .then(({body})=>{
+        expect(body.msg).toBe('article not found')
+    })
+   })
+   test('responds with 200 with empty array when no comment found for the given id',()=>{
+    return request(app)
+    .get('/api/articles/7/comments')
+    .expect(200)
+    .then(({body})=>{
+        expect(body.comments).toEqual([])
+    })
+   })
+   test('responds with 400 when given id is NaN',()=>{
+    return request(app)
+    .get('/api/articles/one/comments')
+    .expect(400)
+    .then(({body})=>{
+        expect(body.msg).toBe('bad request')
+    })
+   })
 })
