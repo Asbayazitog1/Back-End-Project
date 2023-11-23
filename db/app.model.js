@@ -14,7 +14,7 @@ exports.selectArticlesById=(article_id)=>{
 const queryString =`SELECT * FROM articles WHERE article_id =$1;`
   return db.query(queryString,[article_id]).then(result =>{
     if(result.rows.length === 0){
-        return Promise.reject({ status: 404, msg: "not found" })
+        return Promise.reject({ status: 404, msg: "article not found" })
     }
     return result.rows[0]
   })
@@ -46,9 +46,7 @@ exports.selectAllArticles = (query) =>{
 }
 
 exports.selectCommentsByArticleID = (article_id) =>{
-  if(typeof article_id === 'number'){
-    return Promise.reject({ status: 400, msg: "bad request" })
-  }
+ 
 const queryString = `SELECT comment_id,votes,created_at,author,body,article_id FROM comments WHERE article_id = $1 ORDER BY created_at DESC;`
  return db.query(queryString,[article_id]).then(({rows}) => {
   if(rows.length === 0){

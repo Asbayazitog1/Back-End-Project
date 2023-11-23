@@ -85,7 +85,7 @@ describe("GET/api/articles/:article_id",()=>{
        .get('/api/articles/99')
        .expect(404)
        .then(({body})=>{
-        expect(body.msg).toBe("not found")
+        expect(body.msg).toBe("article not found")
     })
     })
 })
@@ -153,9 +153,17 @@ describe("GET /api/articles/:article_id/comments",()=>{
 
     })
    }) 
-   test('responds with 404 when no math found for the given id',()=>{
+   test('responds with 404 when no article found for the given id',()=>{
     return request(app)
     .get('/api/articles/55/comments')
+    .expect(404)
+    .then(({body})=>{
+        expect(body.msg).toBe('article not found')
+    })
+   })
+   test('responds with 404 when no comment found for the given id',()=>{
+    return request(app)
+    .get('/api/articles/7/comments')
     .expect(404)
     .then(({body})=>{
         expect(body.msg).toBe('comment not found')
