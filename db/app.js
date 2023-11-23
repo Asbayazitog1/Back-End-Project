@@ -1,6 +1,6 @@
 const express = require("express");
 const { handlePsqErrors, handleCustomErrors } = require("./errors");
-const { getAllTopics, getAllEndpoints, getArticleByArticleID, getAllArticles, getAllCommentsByArticleId } = require("./app.controller");
+const { getAllTopics, getAllEndpoints, getArticleByArticleID, getAllArticles, getAllCommentsByArticleId, addNewCommentByArticleId } = require("./app.controller");
 
 
 const app =express()
@@ -12,6 +12,8 @@ app.get('/api/articles/:article_id',getArticleByArticleID)
 app.get("/api",getAllEndpoints)
 app.get('/api/articles/:article_id/comments',getAllCommentsByArticleId)
 app.get("/api/articles",getAllArticles)
+
+app.post("/api/articles/:article_id/comments",addNewCommentByArticleId)
 
 
 

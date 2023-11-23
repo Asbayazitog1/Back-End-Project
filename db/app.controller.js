@@ -1,5 +1,7 @@
-const { selectTopics, selectArticlesById,selectAllArticles, selectCommentsByArticleID } = require("./app.model")
+const { log } = require("console")
+const { selectTopics, selectArticlesById,selectAllArticles, selectCommentsByArticleID, insertNewComment } = require("./app.model")
 const fs =require("fs/promises")
+
 exports.getAllTopics = (req,res,next) =>{
     selectTopics().then(data =>{
        
@@ -18,8 +20,6 @@ return fs.readFile(`./endpoints.json`,'utf-8').then(result =>{
 
 
 }
-
-
 exports.getAllTopics = (req,res,next) =>{
     selectTopics().then(data =>{
        
@@ -37,7 +37,6 @@ selectArticlesById(article_id).then(article =>{
     next(err)
 })
 }
-
 exports.getAllArticles =(req,res,next) =>{
     const query = req.query
 selectAllArticles(query).then((articles)=>{
@@ -46,7 +45,6 @@ selectAllArticles(query).then((articles)=>{
     next(err)
 })
 }
-
 exports.getAllCommentsByArticleId =(req,res,next) => {
 const {article_id} = req.params
 selectArticlesById(article_id).then((article)=>{
@@ -58,4 +56,15 @@ selectArticlesById(article_id).then((article)=>{
 }).catch(err => {
     next(err)
 })
+}
+exports.addNewCommentByArticleId =(req,res,next) => { 
+const newComment =req.body
+const {article_id} =req.params
+insertNewComment(newComment,article_id).then(result => {
+    console.log(result.rows)
+    res.status(201).send(result.rows[0])
+})
+// .catch((err)=>{
+//     next(err)
+// })
 }

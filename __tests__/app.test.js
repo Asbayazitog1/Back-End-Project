@@ -3,8 +3,6 @@ const request = require("supertest")
 const seed = require("../db/seeds/seed")
 const data = require("../db/data/test-data/")
 const db = require("../db/connection")
-const { string } = require("pg-format")
-const articles = require("../db/data/test-data/articles")
 require("jest-sorted")
 
 beforeEach(() => {
@@ -177,4 +175,29 @@ describe("GET /api/articles/:article_id/comments",()=>{
         expect(body.msg).toBe('bad request')
     })
    })
+})
+describe("POST /api/articles/:article_id/comments",()=>{ 
+    
+    test("responds with 201 and with the new comment", ()=>{
+        const newComment =[{
+            username: 'lurker',
+            body: 'adding new comment'
+            } ]
+       
+        return request(app)
+            .post("/api/articles/2/comments")
+            .send(newComment)
+            .expect(201)
+            .then(({body})=>{
+                expect(body).toEqual({
+                    comment_id:19,
+                    body: 'adding new comment',
+                    votes: 0,
+                    author: "lurker",
+                    article_id: 2,
+                    created_at: expect.any(String)
+                })
+            })
+        
+    })
 })

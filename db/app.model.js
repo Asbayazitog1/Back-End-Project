@@ -1,6 +1,9 @@
 const db = require("../db/connection")
 const format = require("pg-format")
 const fs = require("fs/promises")
+const { commentData } = require("./data/test-data")
+const { Console } = require("console")
+const { formatComments, convertTimestampToDate } = require("./seeds/utils")
 
 exports.selectTopics =() =>{
     const queryString =`SELECT * FROM topics`
@@ -51,4 +54,21 @@ const queryString = `SELECT comment_id,votes,created_at,author,body,article_id F
  return db.query(queryString,[article_id]).then(({rows}) => {
   return rows
  })
+}
+exports.insertNewComment =(newComment,id) => {
+  const created_at = new Date().valueOf()
+  const date =convertTimestampToDate({created_at})
+  const newCommentData ={
+    body: newComment[0].body  ,
+    author :  newComment[0].username ,
+    article_id : id,
+    votes :0,
+    created_at : date.created_at
+
+  }
+  console.log(newCommentData)
+  const insertCommentsQueryStr =`INSERT INTO comments(body, author, article_id, votes, created_at) VALUES($1,$2,$3,$4,$5) RETURNING*;`
+  
+  return db.query(insertCommentsQueryStr,[newCommentData.body,newCommentData.author,newCommentData.article_id,newCommentData.votes,newCommentData.created_at])
+  
 }
