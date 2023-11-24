@@ -1,5 +1,5 @@
 const { log } = require("console")
-const { selectTopics, selectArticlesById,selectAllArticles, selectCommentsByArticleID, insertNewComment } = require("./app.model")
+const { selectTopics, selectArticlesById,selectAllArticles, selectCommentsByArticleID, insertNewComment, checkUsersByUserName } = require("./app.model")
 const fs =require("fs/promises")
 
 exports.getAllTopics = (req,res,next) =>{
@@ -59,13 +59,15 @@ selectArticlesById(article_id).then((article)=>{
 }
 exports.addNewCommentByArticleId =(req,res,next) => { 
 const newComment =req.body
+const username = req.body[0].username
 const {article_id} =req.params
 const checkArticleExists = selectArticlesById(article_id) 
+const checkUser= checkUsersByUserName(username)
 const insetCommentIfExits =insertNewComment(newComment,article_id)
 
-Promise.all([checkArticleExists,insetCommentIfExits])
+Promise.all([checkArticleExists,checkUser,insetCommentIfExits])
 .then(result => {
-    res.status(201).send(result[1].rows[0])
+    res.status(201).send({comment :result[2][0]})
 })
 .catch((err)=>{
     next(err)

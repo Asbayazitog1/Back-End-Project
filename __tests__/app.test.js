@@ -189,7 +189,31 @@ describe("POST /api/articles/:article_id/comments",()=>{
             .send(newComment)
             .expect(201)
             .then(({body})=>{
-                expect(body).toEqual({
+                expect(body.comment).toEqual({
+                    comment_id:19,
+                    body: 'adding new comment',
+                    votes: 0,
+                    author: "lurker",
+                    article_id: 2,
+                    created_at: expect.any(String)
+                })
+            })
+        
+    })
+    test("responds with 201 and ignores any input other than username and body", ()=>{
+        const newComment =[{
+            username: 'lurker',
+            body: 'adding new comment',
+            extra:"should be ignored"
+            } ]
+       
+        return request(app)
+            .post("/api/articles/2/comments")
+            .send(newComment)
+            .expect(201)
+            .then(({body})=>{
+                expect(body.comment).not.toHaveProperty("extra")
+                expect(body.comment).toEqual({
                     comment_id:19,
                     body: 'adding new comment',
                     votes: 0,
@@ -213,6 +237,19 @@ describe("POST /api/articles/:article_id/comments",()=>{
         expect(body.msg).toBe('article not found')
     })
     })
+    test("responds with 404 not found when there is no username matches in db with the given username",()=>{
+        const newComment =[{
+            username: 'ahmet',
+            body: 'adding new comment'
+            } ]
+        return request(app)
+    .post('/api/articles/2/comments')
+    .send(newComment)
+    .expect(404)
+    .then(({body})=>{
+        expect(body.msg).toBe('user not found')
+    })
+    })
     test("responds with 400 when given id is NaN",()=>{
         const newComment =[{
             username: 'lurker',
@@ -224,6 +261,18 @@ describe("POST /api/articles/:article_id/comments",()=>{
     .expect(400)
     .then(({body})=>{
         expect(body.msg).toBe('bad request')
+    })
+    })
+    test("responds with 400 when given id is NaN",()=>{
+        const newComment =[{
+            body: 'adding new comment'
+            } ]
+        return request(app)
+    .post('/api/articles/2/comments')
+    .send(newComment)
+    .expect(400)
+    .then(({body})=>{
+        expect(body.msg).toBe('bad request body')
     })
     })
 })

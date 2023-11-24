@@ -58,6 +58,10 @@ const queryString = `SELECT comment_id,votes,created_at,author,body,article_id F
 exports.insertNewComment =(newComment,id) => {
   const created_at = new Date().valueOf()
   const date =convertTimestampToDate({created_at})
+  if(!newComment[0].body || !newComment[0].username){
+      return Promise.reject({ status: 400, msg: "bad request body" })
+      
+  }
   const newCommentData ={
     body: newComment[0].body  ,
     author :  newComment[0].username ,
@@ -68,6 +72,19 @@ exports.insertNewComment =(newComment,id) => {
   }
   const insertCommentsQueryStr =`INSERT INTO comments(body, author, article_id, votes, created_at) VALUES($1,$2,$3,$4,$5) RETURNING*;`
   
-  return db.query(insertCommentsQueryStr,[newCommentData.body,newCommentData.author,newCommentData.article_id,newCommentData.votes,newCommentData.created_at])
+  return db.query(insertCommentsQueryStr,[newCommentData.body,newCommentData.author,newCommentData.article_id,newCommentData.votes,newCommentData.created_at]).then(({rows})=>{
+    return rows
+  })
   
+}
+exports.checkUsersByUserName = (username) =>{
+  
+  const queryString =`SELECT * FROM users WHERE username = $1;`
+  return db.query(queryString,[username]).then(({rows})=>{
+    if(rows.length===0){
+      return Promise.reject({ status: 404, msg: "user not found" })
+    }
+    
+    return rows
+  })
 }
