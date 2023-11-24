@@ -64,6 +64,10 @@
   "POST /api/articles/:article_id/comments" : {
   "description": "adds a new comment and serves it",
   "queries": [],
+  "input":{
+    "username":"",
+    "body":""
+  },
   "exampleResponse": {
     "comments": 
       {
