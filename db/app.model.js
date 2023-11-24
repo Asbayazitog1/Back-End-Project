@@ -66,7 +66,6 @@ exports.insertNewComment =(newComment,id) => {
     created_at : date.created_at
 
   }
-  console.log(newCommentData)
   const insertCommentsQueryStr =`INSERT INTO comments(body, author, article_id, votes, created_at) VALUES($1,$2,$3,$4,$5) RETURNING*;`
   
   return db.query(insertCommentsQueryStr,[newCommentData.body,newCommentData.author,newCommentData.article_id,newCommentData.votes,newCommentData.created_at])

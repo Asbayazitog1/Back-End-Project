@@ -200,4 +200,30 @@ describe("POST /api/articles/:article_id/comments",()=>{
             })
         
     })
+    test("responds with 404 not found when there is no article found with given id",()=>{
+        const newComment =[{
+            username: 'lurker',
+            body: 'adding new comment'
+            } ]
+        return request(app)
+    .post('/api/articles/55/comments')
+    .send(newComment)
+    .expect(404)
+    .then(({body})=>{
+        expect(body.msg).toBe('article not found')
+    })
+    })
+    test("responds with 400 when given id is NaN",()=>{
+        const newComment =[{
+            username: 'lurker',
+            body: 'adding new comment'
+            } ]
+        return request(app)
+    .post('/api/articles/two/comments')
+    .send(newComment)
+    .expect(400)
+    .then(({body})=>{
+        expect(body.msg).toBe('bad request')
+    })
+    })
 })

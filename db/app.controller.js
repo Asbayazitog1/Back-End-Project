@@ -60,11 +60,14 @@ selectArticlesById(article_id).then((article)=>{
 exports.addNewCommentByArticleId =(req,res,next) => { 
 const newComment =req.body
 const {article_id} =req.params
-insertNewComment(newComment,article_id).then(result => {
-    console.log(result.rows)
-    res.status(201).send(result.rows[0])
+const checkArticleExists = selectArticlesById(article_id) 
+const insetCommentIfExits =insertNewComment(newComment,article_id)
+
+Promise.all([checkArticleExists,insetCommentIfExits])
+.then(result => {
+    res.status(201).send(result[1].rows[0])
 })
-// .catch((err)=>{
-//     next(err)
-// })
+.catch((err)=>{
+    next(err)
+})
 }
