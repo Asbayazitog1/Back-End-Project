@@ -179,10 +179,10 @@ describe("GET /api/articles/:article_id/comments",()=>{
 describe("POST /api/articles/:article_id/comments",()=>{ 
     
     test("responds with 201 and with the new comment", ()=>{
-        const newComment =[{
+        const newComment ={
             username: 'lurker',
             body: 'adding new comment'
-            } ]
+            } 
        
         return request(app)
             .post("/api/articles/2/comments")
@@ -201,11 +201,11 @@ describe("POST /api/articles/:article_id/comments",()=>{
         
     })
     test("responds with 201 and ignores any input other than username and body", ()=>{
-        const newComment =[{
+        const newComment ={
             username: 'lurker',
             body: 'adding new comment',
             extra:"should be ignored"
-            } ]
+            } 
        
         return request(app)
             .post("/api/articles/2/comments")
@@ -225,10 +225,10 @@ describe("POST /api/articles/:article_id/comments",()=>{
         
     })
     test("responds with 404 not found when there is no article found with given id",()=>{
-        const newComment =[{
+        const newComment ={
             username: 'lurker',
             body: 'adding new comment'
-            } ]
+            } 
         return request(app)
     .post('/api/articles/55/comments')
     .send(newComment)
@@ -238,10 +238,10 @@ describe("POST /api/articles/:article_id/comments",()=>{
     })
     })
     test("responds with 404 not found when there is no username matches in db with the given username",()=>{
-        const newComment =[{
+        const newComment ={
             username: 'ahmet',
             body: 'adding new comment'
-            } ]
+            } 
         return request(app)
     .post('/api/articles/2/comments')
     .send(newComment)
@@ -251,10 +251,10 @@ describe("POST /api/articles/:article_id/comments",()=>{
     })
     })
     test("responds with 400 when given id is NaN",()=>{
-        const newComment =[{
+        const newComment ={
             username: 'lurker',
             body: 'adding new comment'
-            } ]
+            } 
         return request(app)
     .post('/api/articles/two/comments')
     .send(newComment)
@@ -264,9 +264,9 @@ describe("POST /api/articles/:article_id/comments",()=>{
     })
     })
     test("responds with 400 when given id is NaN",()=>{
-        const newComment =[{
+        const newComment ={
             body: 'adding new comment'
-            } ]
+            } 
         return request(app)
     .post('/api/articles/2/comments')
     .send(newComment)

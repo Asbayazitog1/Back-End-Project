@@ -59,7 +59,7 @@ selectArticlesById(article_id).then((article)=>{
 }
 exports.addNewCommentByArticleId =(req,res,next) => { 
 const newComment =req.body
-const username = req.body[0].username
+const username = req.body.username
 const {article_id} =req.params
 const checkArticleExists = selectArticlesById(article_id) 
 const checkUser= checkUsersByUserName(username)
