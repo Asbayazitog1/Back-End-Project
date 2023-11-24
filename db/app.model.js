@@ -1,6 +1,9 @@
 const db = require("../db/connection")
 const format = require("pg-format")
 const fs = require("fs/promises")
+const { commentData } = require("./data/test-data")
+const { Console } = require("console")
+const { formatComments, convertTimestampToDate } = require("./seeds/utils")
 
 exports.selectTopics =() =>{
     const queryString =`SELECT * FROM topics`
@@ -51,4 +54,38 @@ const queryString = `SELECT comment_id,votes,created_at,author,body,article_id F
  return db.query(queryString,[article_id]).then(({rows}) => {
   return rows
  })
+}
+exports.insertNewComment =(newComment,id) => {
+  const created_at = new Date().valueOf()
+  const date =convertTimestampToDate({created_at})
+  if(!newComment.body || !newComment.username){
+      return Promise.reject({ status: 400, msg: "bad request body" })
+      
+  }
+  const newCommentData ={
+    body: newComment.body  ,
+    author :  newComment.username ,
+    article_id : id,
+    votes :0,
+    created_at : date.created_at
+
+  }
+  const insertCommentsQueryStr =`INSERT INTO comments(body, author, article_id, votes, created_at) VALUES($1,$2,$3,$4,$5) RETURNING*;`
+  
+  return db.query(insertCommentsQueryStr,[newCommentData.body,newCommentData.author,newCommentData.article_id,newCommentData.votes,newCommentData.created_at]).then(({rows})=>{
+    return rows
+  })
+  
+}
+exports.checkUsersByUserName = (username) =>{
+  
+  const queryString =`SELECT * FROM users WHERE username = $1;`
+  return db.query(queryString,[username]).then(({rows})=>{
+    console.log(rows)
+    if(rows.length===0){
+      return Promise.reject({ status: 404, msg: "user not found" })
+    }
+    
+    return rows
+  })
 }

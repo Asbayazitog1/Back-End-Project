@@ -44,4 +44,36 @@
           "votes":0
       }}
   }
+},
+  "GET /api/articles/:article_id/comments" : {
+  "description": "serves the comments with given article id",
+  "queries": [],
+  "exampleResponse": {
+    "comments": 
+      {
+        "comment_id" : 1,
+        "votes" : 2,
+        "created_at" :"Date",
+        "author": "lurker",
+        "body" : "text",
+        "article_id" :1
+    }
+    
+  }
+},
+  "POST /api/articles/:article_id/comments" : {
+  "description": "adds a new comment and serves it",
+  "queries": [],
+  "exampleResponse": {
+    "comments": 
+      {
+        "comment_id" : 1,
+        "votes" : 2,
+        "created_at" :"Date",
+        "author": "lurker",
+        "body" : "text",
+        "article_id" :1
+    }
+    
+  }
 }}
