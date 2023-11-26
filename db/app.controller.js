@@ -1,5 +1,5 @@
 const { log } = require("console")
-const { selectTopics, selectArticlesById,selectAllArticles, selectCommentsByArticleID, insertNewComment, checkUsersByUserName } = require("./app.model")
+const { selectTopics, selectArticlesById,selectAllArticles, selectCommentsByArticleID, insertNewComment, checkUsersByUserName, alterArticleByArticleID } = require("./app.model")
 const fs =require("fs/promises")
 
 exports.getAllTopics = (req,res,next) =>{
@@ -70,6 +70,17 @@ Promise.all([checkArticleExists,checkUser,insetCommentIfExits])
     res.status(201).send({comment :result[2][0]})
 })
 .catch((err)=>{
+    next(err)
+})
+}
+exports.updateArticleByArticleId = (req,res,next) => {
+    const {article_id} =req.params
+    const {inc_votes} = req.body
+    const checkArticleExists = selectArticlesById(article_id) 
+    const updateArticle =alterArticleByArticleID(inc_votes,article_id)
+Promise.all([checkArticleExists,updateArticle]).then(result =>{
+    res.status(200).send({article :result[1]})
+}).catch((err)=>{
     next(err)
 })
 }
