@@ -81,11 +81,20 @@ exports.checkUsersByUserName = (username) =>{
   
   const queryString =`SELECT * FROM users WHERE username = $1;`
   return db.query(queryString,[username]).then(({rows})=>{
-    console.log(rows)
     if(rows.length===0){
       return Promise.reject({ status: 404, msg: "user not found" })
     }
     
     return rows
   })
+}
+exports.alterArticleByArticleID = (incValue,article_id) =>{
+  if(!incValue || typeof incValue === "string"){
+    return Promise.reject({status:400 , msg:"invalid input"})
+  }
+  const queryString = `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;`
+const queryInput =[incValue,article_id]
+return db.query(queryString,queryInput).then(({rows})=>{
+  return rows[0]
+})
 }
