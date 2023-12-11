@@ -84,7 +84,8 @@ Promise.all([checkArticleExists,updateArticle]).then(result =>{
 })
 }
 exports.deleteCommentByCommentID =(req,res,next) =>{
-removeCommentByCommetnId().then(()=>{
+const {comment_id}=req.params
+removeCommentByCommetnId(comment_id).then(()=>{
     res.send(204)
 })
 }
