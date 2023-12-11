@@ -1,9 +1,5 @@
 const db = require("../db/connection")
-const format = require("pg-format")
-const fs = require("fs/promises")
-const { commentData } = require("./data/test-data")
-const { Console } = require("console")
-const { formatComments, convertTimestampToDate } = require("./seeds/utils")
+const {  convertTimestampToDate } = require("./seeds/utils")
 
 exports.selectTopics =() =>{
     const queryString =`SELECT * FROM topics`

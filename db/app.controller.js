@@ -1,4 +1,3 @@
-const { log } = require("console")
 const { selectTopics, selectArticlesById,selectAllArticles, selectCommentsByArticleID, insertNewComment, checkUsersByUserName, alterArticleByArticleID, removeCommentByCommetnId } = require("./app.model")
 const fs =require("fs/promises")
 
