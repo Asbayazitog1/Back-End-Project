@@ -51,7 +51,6 @@ describe("GET /api",()=>{
         })
     })
 })
-
 describe("GET/api/articles/:article_id",()=>{
     test("responds with 200 and article info of given article id",()=>{
         return request(app)
@@ -87,7 +86,6 @@ describe("GET/api/articles/:article_id",()=>{
     })
     })
 })
-
 describe("GET /api/articles",()=>{
     test("responds with 200 and all articles in an array without body property",()=>{
         return request(app)
@@ -128,7 +126,6 @@ describe("GET /api/articles",()=>{
           });
 })
 })
-
 describe("GET /api/articles/:article_id/comments",()=>{
    test("responds with 200 with all articles with given id from the latest to oldest",()=>{
     return request(app)
@@ -372,4 +369,11 @@ test("responds with 404 not found when there is no article found with given id",
     expect(body.msg).toBe('Not Found')
 })
 })
+})
+describe("DELETE /api/comments/:comment_id",()=>{
+    test("responds with 204 and no comment",()=>{
+        return request(app)
+        .delete("/api/comments/18")
+        .expect(204)
+    })
 })
