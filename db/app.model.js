@@ -98,3 +98,9 @@ exports.removeCommentByCommetnId=(comment_id)=>{
    const queryString =`DELETE FROM comments WHERE comment_id = $1;`
    return db.query(queryString,[comment_id])
 }
+exports.selectAllUsers=()=>{
+  const queryString =`SELECT * FROM users;`
+  return db.query(queryString).then(({rows})=>{
+    return rows
+  })
+}

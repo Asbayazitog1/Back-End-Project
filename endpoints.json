@@ -80,4 +80,40 @@
     }
     
   }
+},
+"PATCH /api/articles/:article_id" : {
+  "description": "changes the votes property in an article",
+  "queries": [],
+  "input":{
+    "inc_votes":1
+  },
+  "exampleResponse": {
+    "articles": 
+      {
+        "comment_id" : 1,
+        "votes" : "2 , 1 more than before"  ,
+        "created_at" :"Date",
+        "author": "lurker",
+        "body" : "text",
+        "article_id" :1
+    }
+    
+  }
+},
+"DELETE /api/comments/:comment_id":{
+  "description":"deletes the with the given id",
+  "queries":[],
+  "input":{},
+  "exampleResponse":{}
+},
+"GET /api/users":{
+  "description":"gets all users in an array",
+  "queries":[],
+  "input":{},
+  "exampleResponse":[{
+    "username": "butter_bridge",
+   "name": "jonny",
+    "avatar_url":
+      "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+  }]
 }}

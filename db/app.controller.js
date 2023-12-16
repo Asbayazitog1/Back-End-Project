@@ -1,4 +1,4 @@
-const { selectTopics, selectArticlesById,selectAllArticles, selectCommentsByArticleID, insertNewComment, checkUsersByUserName, alterArticleByArticleID, removeCommentByCommetnId } = require("./app.model")
+const { selectTopics, selectArticlesById,selectAllArticles, selectCommentsByArticleID, insertNewComment, checkUsersByUserName, alterArticleByArticleID, removeCommentByCommetnId, selectAllUsers } = require("./app.model")
 const fs =require("fs/promises")
 
 exports.getAllTopics = (req,res,next) =>{
@@ -87,5 +87,10 @@ exports.deleteCommentByCommentID =(req,res,next) =>{
 const {comment_id}=req.params
 removeCommentByCommetnId(comment_id).then(()=>{
     res.send(204)
+})
+}
+exports.getAllUsers =(req,res,next)=>{
+selectAllUsers().then(result =>{
+   res.status(200).send({users: result})
 })
 }
