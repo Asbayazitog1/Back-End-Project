@@ -19,15 +19,6 @@ return fs.readFile(`./endpoints.json`,'utf-8').then(result =>{
 
 
 }
-exports.getAllTopics = (req,res,next) =>{
-    selectTopics().then(data =>{
-       
-    res.status(200).send({topics:data})
-       
-    }).catch(err => {
-       next(err)
-    })
-}
 exports.getArticleByArticleID=(req,res,next)=>{
 const {article_id} = req.params
 selectArticlesById(article_id).then(article =>{
@@ -38,7 +29,14 @@ selectArticlesById(article_id).then(article =>{
 }
 exports.getAllArticles =(req,res,next) =>{
     const query = req.query
-selectAllArticles(query).then((articles)=>{
+    selectTopics().then(data =>{
+       const allowedTopics= data.map((topicObj) =>{
+         return topicObj.slug
+       })
+      return selectAllArticles(query,allowedTopics)
+     })   
+.then((articles)=>{
+    console.log(articles)
     res.status(200).send({articles : articles})
 }).catch(err =>{
     next(err)

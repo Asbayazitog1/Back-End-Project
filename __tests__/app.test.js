@@ -117,6 +117,19 @@ describe("GET /api/articles",()=>{
           expect(body.articles).toBeSortedBy("created_at", { descending: true });
         })
     })
+    test("responds with 200 and all with given topic guery articles in an array without body property",()=>{
+        return request(app)
+        .get("/api/articles?topic=cats")
+        .expect(200)
+        .then(({body})=>{
+            const articles =body.articles
+            expect(articles.length).toBe(1);
+            articles.forEach(article =>{
+                expect(article).not.toHaveProperty("body")
+                expect(article.topic).toBe("cats")
+            })
+        })
+    })
     test("responds with 400 with an invalid order option", () => {
         return request(app)
           .get("/api/articles?sort_by=date")

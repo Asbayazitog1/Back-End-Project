@@ -19,23 +19,34 @@ const queryString =`SELECT * FROM articles WHERE article_id =$1;`
   })
 }
 
-exports.selectAllArticles = (query) =>{
+exports.selectAllArticles = (query,allowedTopics) =>{
+  const topic = query.topic
   const sort_by = query.sort_by
   const order = query.order
+  // console.log(topic)
+
   const allowedSortBy =['author','title','article_id','topic','created_at','votes','article_img_url','comment_count']
   if(sort_by && !allowedSortBy.includes(sort_by)){
     return Promise.reject({ status: 400, msg: "Invalid sort option" })
   }
+  if(topic && !allowedTopics.includes(topic)){
+    return Promise.reject({ status: 400, msg: "Invalid topic" })
+  }
   let queryString =`SELECT article_id, author, title,topic, created_at, votes, article_img_url ,(SELECT COUNT(article_id) FROM comments WHERE articles.article_id = comments.article_id) AS comment_count FROM articles`
+const queryParams=[]
 
   const sortOrder =(order && order ==="asc")?'ASC':'DESC'
-
-  if(sort_by){
-    queryString +=` ORDER BY ${sort_by} ${sortOrder};`
+  if(topic){
+    queryString += ` WHERE articles.topic = $1;`
+    queryParams.push(topic)
+  }else if(sort_by){
+    queryString +=` ORDER BY ${sort_by} ${sortOrder};` 
+  }else if(topic && sort_by){
+    queryString +=` WHERE articles.topic = $1 ORDER BY ${sort_by} ${sortOrder};`
   }
 
 
-  return db.query(queryString).then(({rows})=>{
+  return db.query(queryString,queryParams).then(({rows})=>{
     rows.forEach(row => {
       row.comment_count =+row.comment_count
     })
